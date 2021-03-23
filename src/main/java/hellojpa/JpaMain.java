@@ -31,10 +31,12 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = em.find(Team.class, team.getId()); //1차 캐시
+            List<Member> members = findTeam.getMembers();
 
-            Team findTeam = findMember.getTeam();
-            System.out.println("findTeam = " + findTeam.getName());
+            for (Member member1 : members) {
+                System.out.println("member1 = " + member1.getUsername());
+            }
 
             tx.commit();
         }catch(Exception e){
