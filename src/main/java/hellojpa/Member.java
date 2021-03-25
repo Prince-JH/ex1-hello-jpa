@@ -1,6 +1,7 @@
 package hellojpa;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
         sequenceName = "MEMBER_SEQ",
         initialValue = 1, allocationSize = 10
 )
-public class Member {
+public class Member extends BaseEntity {
 
     //기본 키
     @Id
@@ -28,6 +29,7 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<MemberProduct> memberProducts = new ArrayList<MemberProduct>();
+
 
     public Long getId() {
         return id;
