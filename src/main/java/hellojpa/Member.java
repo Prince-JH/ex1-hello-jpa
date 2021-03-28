@@ -27,6 +27,10 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "lOCKER_ID")
     private Locker locker;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
+
     @OneToMany(mappedBy = "member")
     private List<MemberProduct> memberProducts = new ArrayList<MemberProduct>();
 

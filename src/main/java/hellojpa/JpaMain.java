@@ -28,14 +28,10 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            Member refMember = em.getReference(Member.class, member.getId());
-            System.out.println("refMember = " + refMember.getClass());
+//            Member m = em.find(Member.class, member.getId());
 
-            //영속성 컨텍스트 날아간 시점 -> 프록시는 영속성 컨텍스트를 통해 초기화
-            em.clear();
-
-            refMember.getUsername();
-            System.out.println("refMember.getUsername = " + refMember.getUsername());
+            List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class)
+                    .getResultList();
 
             tx.commit();
         } catch (Exception e) {
