@@ -34,7 +34,6 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<MemberProduct> memberProducts = new ArrayList<MemberProduct>();
 
-
     public Long getId() {
         return id;
     }
@@ -49,6 +48,30 @@ public class Member extends BaseEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Locker getLocker() {
+        return locker;
+    }
+
+    public void setLocker(Locker locker) {
+        this.locker = locker;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public List<MemberProduct> getMemberProducts() {
+        return memberProducts;
+    }
+
+    public void setMemberProducts(List<MemberProduct> memberProducts) {
+        this.memberProducts = memberProducts;
     }
 
     public Member(){
