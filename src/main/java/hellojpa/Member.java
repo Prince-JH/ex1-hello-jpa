@@ -4,9 +4,7 @@ import net.bytebuddy.asm.Advice;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @SequenceGenerator(
@@ -25,24 +23,21 @@ public class Member extends BaseEntity {
     @Column(name = "USERNAME")
     private String username;
 
-    //기간 Period
     @Embedded
-    private Period workPeriod;
+    @Column Address homeAddress;
 
-    //주소
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "city",
-                    column = @Column(name = "work_city")),
-            @AttributeOverride(name = "street",
-                    column = @Column(name = "work_street")),
-            @AttributeOverride(name = "zipcode",
-                    column = @Column(name = "work_zipcode"))
-    })
-    private Address homeAddress;
+    @ElementCollection
+    @CollectionTable(name = "FAVORITE_FOODS", joinColumns =
+    @JoinColumn(name = "member_id")
+    )
+    @Column(name = "FOOD_NAME")
+    private Set<String> favoriteFood = new HashSet<>();
 
-    @Embedded
-    private Address workAddress;
+    @ElementCollection
+    @CollectionTable(name = "ADDRESS", joinColumns =
+    @JoinColumn(name = "member_id")
+    )
+    private List<Address> addressesHistory = new ArrayList<>();
 
     public Member() {
 
@@ -64,19 +59,27 @@ public class Member extends BaseEntity {
         this.username = username;
     }
 
-    public Period getWorkPeriod() {
-        return workPeriod;
-    }
-
-    public void setWorkPeriod(Period workPeriod) {
-        this.workPeriod = workPeriod;
-    }
-
     public Address getHomeAddress() {
         return homeAddress;
     }
 
     public void setHomeAddress(Address homeAddress) {
         this.homeAddress = homeAddress;
+    }
+
+    public Set<String> getFavoriteFood() {
+        return favoriteFood;
+    }
+
+    public void setFavoriteFood(Set<String> favoriteFood) {
+        this.favoriteFood = favoriteFood;
+    }
+
+    public List<Address> getAddressesHistory() {
+        return addressesHistory;
+    }
+
+    public void setAddressesHistory(List<Address> addressesHistory) {
+        this.addressesHistory = addressesHistory;
     }
 }
