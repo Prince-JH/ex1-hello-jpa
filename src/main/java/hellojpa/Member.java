@@ -1,5 +1,7 @@
 package hellojpa;
 
+import net.bytebuddy.asm.Advice;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,16 +25,28 @@ public class Member extends BaseEntity {
     @Column(name = "USERNAME")
     private String username;
 
-    @OneToOne
-    @JoinColumn(name = "lOCKER_ID")
-    private Locker locker;
+    //기간 Period
+    @Embedded
+    private Period workPeriod;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
+    //주소
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city",
+                    column = @Column(name = "work_city")),
+            @AttributeOverride(name = "street",
+                    column = @Column(name = "work_street")),
+            @AttributeOverride(name = "zipcode",
+                    column = @Column(name = "work_zipcode"))
+    })
+    private Address homeAddress;
 
-    @OneToMany(mappedBy = "member")
-    private List<MemberProduct> memberProducts = new ArrayList<MemberProduct>();
+    @Embedded
+    private Address workAddress;
+
+    public Member() {
+
+    }
 
     public Long getId() {
         return id;
@@ -50,31 +64,19 @@ public class Member extends BaseEntity {
         this.username = username;
     }
 
-    public Locker getLocker() {
-        return locker;
+    public Period getWorkPeriod() {
+        return workPeriod;
     }
 
-    public void setLocker(Locker locker) {
-        this.locker = locker;
+    public void setWorkPeriod(Period workPeriod) {
+        this.workPeriod = workPeriod;
     }
 
-    public Team getTeam() {
-        return team;
+    public Address getHomeAddress() {
+        return homeAddress;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    public List<MemberProduct> getMemberProducts() {
-        return memberProducts;
-    }
-
-    public void setMemberProducts(List<MemberProduct> memberProducts) {
-        this.memberProducts = memberProducts;
-    }
-
-    public Member(){
-
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 }
