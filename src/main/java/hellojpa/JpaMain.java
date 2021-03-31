@@ -1,9 +1,9 @@
 package hellojpa;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -19,30 +19,18 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setHomeAddress(new Address("homeCity", "street", "10000"));
 
-            member.getFavoriteFood().add("치킨");
-            member.getFavoriteFood().add("피자");
-            member.getFavoriteFood().add("족발");
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Member> query = cb.createQuery(Member.class);
 
-            member.getAddressHistory().add(new AddressEntity("old1", "street", "1"));
-            member.getAddressHistory().add(new AddressEntity("old2", "street", "2"));
+            Root<Member> m = query.from(Member.class);
 
-            em.persist(member);
+            CriteriaQuery<Member> cq = query.select(m).where(cb.equal(m.get("username"), "kim"));
+            List<Member> resultList = em.createQuery(cq).getResultList();
 
-            em.flush();
-            em.clear();
-
-            System.out.println("===============");
-            Member findMember = em.find(Member.class, member.getId());
-
-            Address a = findMember.getHomeAddress();
-            findMember.setHomeAddress(new Address("newCity", a.getStreet(), a.getZipcode()));
-
-            findMember.getFavoriteFood().remove("치킨");
-            findMember.getFavoriteFood().add("한식");
+            for (Member member : resultList) {
+                System.out.println("member = " + member);
+            }
 
 
             tx.commit();
