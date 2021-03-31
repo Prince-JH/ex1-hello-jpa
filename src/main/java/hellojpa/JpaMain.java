@@ -6,6 +6,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
 
@@ -26,10 +27,23 @@ public class JpaMain {
             member.getFavoriteFood().add("피자");
             member.getFavoriteFood().add("족발");
 
-            member.getAddressesHistory().add(new Address("old1", "street", "1"));
-            member.getAddressesHistory().add(new Address("old2", "street", "2"));
+            member.getAddressHistory().add(new AddressEntity("old1", "street", "1"));
+            member.getAddressHistory().add(new AddressEntity("old2", "street", "2"));
 
             em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            System.out.println("===============");
+            Member findMember = em.find(Member.class, member.getId());
+
+            Address a = findMember.getHomeAddress();
+            findMember.setHomeAddress(new Address("newCity", a.getStreet(), a.getZipcode()));
+
+            findMember.getFavoriteFood().remove("치킨");
+            findMember.getFavoriteFood().add("한식");
+
 
             tx.commit();
         } catch (Exception e) {

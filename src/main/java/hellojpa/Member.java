@@ -33,11 +33,15 @@ public class Member extends BaseEntity {
     @Column(name = "FOOD_NAME")
     private Set<String> favoriteFood = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(name = "ADDRESS", joinColumns =
-    @JoinColumn(name = "member_id")
-    )
-    private List<Address> addressesHistory = new ArrayList<>();
+//    @ElementCollection
+//    @CollectionTable(name = "ADDRESS", joinColumns =
+//    @JoinColumn(name = "member_id")
+//    )
+//    private List<Address> addressesHistory = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "MEMBER_ID")
+    private List<AddressEntity> addressHistory = new ArrayList<>();
 
     public Member() {
 
@@ -71,15 +75,15 @@ public class Member extends BaseEntity {
         return favoriteFood;
     }
 
-    public void setFavoriteFood(Set<String> favoriteFood) {
+    private void setFavoriteFood(Set<String> favoriteFood) {
         this.favoriteFood = favoriteFood;
     }
 
-    public List<Address> getAddressesHistory() {
-        return addressesHistory;
+    public List<AddressEntity> getAddressHistory() {
+        return addressHistory;
     }
 
-    public void setAddressesHistory(List<Address> addressesHistory) {
-        this.addressesHistory = addressesHistory;
+    public void setAddressHistory(List<AddressEntity> addressHistory) {
+        this.addressHistory = addressHistory;
     }
 }
