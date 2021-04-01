@@ -20,18 +20,14 @@ public class JpaMain {
 
         try {
 
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Member> query = cb.createQuery(Member.class);
+            Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("Kim");
 
-            Root<Member> m = query.from(Member.class);
+            em.persist(book);
 
-            CriteriaQuery<Member> cq = query.select(m).where(cb.equal(m.get("username"), "kim"));
-            List<Member> resultList = em.createQuery(cq).getResultList();
-
-            for (Member member : resultList) {
-                System.out.println("member = " + member);
-            }
-
+            List<Item> resultList = em.createQuery("select i from Item i " +
+                    "where type(i) = Book", Item.class).getResultList();
 
             tx.commit();
         } catch (Exception e) {
